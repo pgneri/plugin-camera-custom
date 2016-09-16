@@ -17,7 +17,7 @@
     <clobbers target="navigator.customCamera" />
 </js-module>
 
-<asset src="icons" target="www/img/icons" />
+<asset src="icons" target="img/icons" />
 
 <platform name="ios">
     <config-file target="config.xml" parent="/*">
