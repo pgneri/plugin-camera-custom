@@ -2,7 +2,7 @@
 //  CustomCamera.h
 //  CustomCamera
 //
-//  Created by Chris van Es on 24/02/2014.
+//  Created by Patrícia Gabriele Neri on 13/09/16.
 //
 //
 

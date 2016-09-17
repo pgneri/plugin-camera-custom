@@ -2,8 +2,8 @@
 //  CustomCamera.m
 //  CustomCamera
 //
-//  Created by Chris van Es on 24/02/2014.
-//  Modified by Patrícia G Neri on 05/05/2016.
+//  Created by Patrícia Gabriele Neri on 13/09/16.
+//
 //
 
 #import "CustomCamera.h"
@@ -14,7 +14,7 @@ static NSString* toBase64(NSData* data) {
     SEL s1 = NSSelectorFromString(@"cdv_base64EncodedString");
     SEL s2 = NSSelectorFromString(@"base64EncodedString");
     SEL s3 = NSSelectorFromString(@"base64EncodedStringWithOptions:");
-    
+
     if ([data respondsToSelector:s1]) {
         NSString* (*func)(id, SEL) = (void *)[data methodForSelector:s1];
         return func(data, s1);
@@ -36,7 +36,7 @@ static NSString* toBase64(NSData* data) {
     CGFloat quality = [[command argumentAtIndex:1] floatValue];
     CGFloat targetWidth = [[command argumentAtIndex:2] floatValue];
     CGFloat targetHeight = [[command argumentAtIndex:3] floatValue];
-    
+
     if (![UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No rear camera detected"];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -46,7 +46,7 @@ static NSString* toBase64(NSData* data) {
     } else {
         CustomCameraViewController *cameraViewController = [[CustomCameraViewController alloc] initWithCallback:^(UIImage *image) {
             NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-            
+
             NSString* imagePath;
             NSFileManager* fileMgr = [[NSFileManager alloc] init]; // recommended by Apple (vs [NSFileManager defaultManager]) to be threadsafe
 
@@ -55,16 +55,16 @@ static NSString* toBase64(NSData* data) {
             do {
                 imagePath = [NSString stringWithFormat:@"%@/%@%03d%@", documentsDirectory, CDV_PHOTO_PREFIX, i++, filename ];
             } while ([fileMgr fileExistsAtPath:imagePath]);
-            
+
             CGRect bounds = [[UIScreen mainScreen] bounds];
             CGFloat Height = targetWidth;
             CGFloat Width  = targetHeight;
-            
+
             if(targetWidth == -1 || targetHeight == -1){
                 Height = bounds.size.width;
                 Width  = bounds.size.width;
             }
-            
+
             UIImage *scaledImage = [self scaleImage:image toSize:CGSizeMake(Width, Height)];
             NSData *scaledImageData = UIImageJPEGRepresentation(scaledImage, quality / 100);
             [scaledImageData writeToFile:imagePath atomically:YES];
@@ -90,7 +90,7 @@ static NSString* toBase64(NSData* data) {
     if (targetSize.width <= 0 && targetSize.height <= 0) {
         return image;
     }
-    
+
     CGFloat aspectRatio = image.size.height / image.size.width;
     CGSize scaledSize;
     if (targetSize.width > 0 && targetSize.height <= 0) {
@@ -100,7 +100,7 @@ static NSString* toBase64(NSData* data) {
     } else {
         scaledSize = CGSizeMake(targetSize.width, targetSize.height);
     }
-    
+
     UIGraphicsBeginImageContext(scaledSize);
     [image drawInRect:CGRectMake(0, 0, scaledSize.width, scaledSize.height)];
     UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();

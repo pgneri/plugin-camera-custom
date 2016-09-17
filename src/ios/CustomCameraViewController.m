@@ -2,8 +2,8 @@
 //  CustomCameraViewController.m
 //  CustomCamera
 //
-//  Created by Chris van Es on 24/02/2014.
-//  Modified by Patrícia G Neri on 05/05/2016.
+//  Created by Patrícia Gabriele Neri on 13/09/16.
+//
 //
 
 #import "CustomCameraViewController.h"
@@ -25,7 +25,7 @@
     UIView *_topPanel;
     UIView *_bottomPanel;
     UIView *_fullPanel;
-    
+
 }
 
 
@@ -50,7 +50,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (id)initWithCallback:(void(^)(UIImage*))callback {
     self = [super initWithNibName:nil bundle:nil];
-    
+
     if (self) {
         _callback = callback;
         _captureSession = [[AVCaptureSession alloc] init];
@@ -80,23 +80,23 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (UIView*)createOverlayFullScreen {
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     _fullPanel = [[UIView alloc] initWithFrame:CGRectZero];
     [_fullPanel setBackgroundColor: [UIColor clearColor]];
     [overlay addSubview:_fullPanel];
-    
+
     return overlay;
 }
 
 - (CALayer*)createLayerCircle {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-    
+
     int radius = bounds.size.width;
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, bounds.size.width, bounds.size.height) cornerRadius:0];
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, (bounds.size.height-bounds.size.width)/2, radius, radius) cornerRadius:radius];
     [path appendPath:circlePath];
     [path setUsesEvenOddFillRule:YES];
-    
+
     CAShapeLayer *fillLayer = [CAShapeLayer layer];
     fillLayer.path = path.CGPath;
     fillLayer.fillRule = kCAFillRuleEvenOdd;
@@ -108,22 +108,22 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (UIView*)createOverlayTop {
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     _topPanel = [[UIView alloc] initWithFrame:CGRectZero];
     [_topPanel setBackgroundColor: [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
     [overlay addSubview:_topPanel];
-    
+
     return overlay;
-    
+
 }
 
 - (UIView*)createOverlayBottom {
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     _bottomPanel = [[UIView alloc] initWithFrame:CGRectZero];
     [_bottomPanel setBackgroundColor: [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
     [overlay addSubview:_bottomPanel];
-    
+
     return overlay;
 }
 
@@ -137,32 +137,32 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 //    [_changeCamera setImage:[UIImage imageNamed:@"www/img/icons/camera_toggle-touched.png"] forState:UIControlStateHighlighted];
 //    [_changeCamera addTarget:self action:@selector(changeCamera) forControlEvents:UIControlEventTouchUpInside];
 //    [overlay addSubview:_changeCamera];
-    
+
 
     _buttonPanel = [[UIView alloc] initWithFrame:CGRectZero];
     [_buttonPanel setBackgroundColor: [UIColor blackColor]];
     [overlay addSubview:_buttonPanel];
-    
+
     _captureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/icons/input-foto.png"] forState:UIControlStateNormal];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/icons/input-foto.png"] forState:UIControlStateSelected];
     [_captureButton setImage:[UIImage imageNamed:@"www/img/icons/input-foto.png"] forState:UIControlStateHighlighted];
     [_captureButton addTarget:self action:@selector(takePictureWaitingForCameraToFocus) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_captureButton];
-    
+
     _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_backButton setTitle:@"Cancelar" forState:UIControlStateNormal];
     [_backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [[_backButton titleLabel] setFont:[UIFont systemFontOfSize:18]];
     [_backButton addTarget:self action:@selector(dismissCameraPreview) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_backButton];
-    
+
     [self.view addSubview:[self createOverlayFullScreen]];
     [self.view.layer addSublayer:[self createLayerCircle]];
-    
+
 //    [self.view addSubview:[self createOverlayTop]];
 //    [self.view addSubview:[self createOverlayBottom]];
-    
+
     return overlay;
 }
 
@@ -176,26 +176,26 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (void)layoutForPhone {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-    
+
     _changeCamera.frame = CGRectMake(bounds.size.width-kChangeCameraButtonWidthPhone,0,
                                       kChangeCameraButtonWidthPhone,
                                       kChangeCameraButtonHeightPhone);
-    
+
     _captureButton.frame = CGRectMake((bounds.size.width / 2) - (kCaptureButtonWidthPhone / 2),
                                       bounds.size.height - kCaptureButtonHeightPhone - kCaptureButtonVerticalInsetPhone,
                                       kCaptureButtonWidthPhone,
                                       kCaptureButtonHeightPhone);
-    
+
     _backButton.frame = CGRectMake((CGRectGetMinX(_captureButton.frame) - kBackButtonWidthPhone) / 2,
                                    CGRectGetMinY(_captureButton.frame) + ((kCaptureButtonHeightPhone - kBackButtonHeightPhone) / 2),
                                    kBackButtonWidthPhone,
                                    kBackButtonHeightPhone);
-    
+
     _buttonPanel.frame = CGRectMake(0,
                                     CGRectGetMinY(_captureButton.frame) - kCaptureButtonVerticalInsetPhone,
                                     bounds.size.width,
                                     kCaptureButtonHeightPhone + (kCaptureButtonVerticalInsetPhone * 2));
-    
+
     CGFloat screenAspectRatio = bounds.size.height / bounds.size.width;
     if (screenAspectRatio <= 1.5f) {
         [self layoutForPhoneWithShortScreen];
@@ -206,15 +206,15 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
  - (void)layoutForPhoneWithShortScreen {
      CGRect bounds = [[UIScreen mainScreen] bounds];
-     
+
      CGFloat bottomsize = kCaptureButtonHeightPhone + (kCaptureButtonVerticalInsetPhone * 2);
-     
+
      _fullPanel.frame = CGRectMake(0, 0, bounds.size.width,
                                   bounds.size.height);
-     
+
      _topPanel.frame = CGRectMake(0, 0, bounds.size.width,
                                   bounds.size.height/2 - bottomsize/2);
-     
+
      _bottomPanel.frame = CGRectMake(0, bounds.size.height/2 + bottomsize/2,
                                      bounds.size.width,
                                      bounds.size.height/2 - bottomsize);
@@ -222,15 +222,15 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (void)layoutForPhoneWithTallScreen {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-    
+
     CGFloat bottomsize = kCaptureButtonHeightPhone + (kCaptureButtonVerticalInsetPhone * 2);
-    
+
     _fullPanel.frame = CGRectMake(0, 0, bounds.size.width,
                                   bounds.size.height);
-    
+
     _topPanel.frame = CGRectMake(0, 0, bounds.size.width,
                                  bounds.size.height/2 - bottomsize/2);
-    
+
     _bottomPanel.frame = CGRectMake(0, bounds.size.height/2 + bottomsize/2,
                                     bounds.size.width,
                                     bounds.size.height/2 - bottomsize);
@@ -238,26 +238,26 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (void)layoutForTablet {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-    
+
     _changeCamera.frame = CGRectMake(bounds.size.width-kChangeCameraButtonWidthTablet,0,
                                      kChangeCameraButtonWidthTablet,
                                      kChangeCameraButtonHeightTablet);
-    
+
     _captureButton.frame = CGRectMake((bounds.size.width / 2) - (kCaptureButtonWidthTablet / 2),
                                       bounds.size.height - kCaptureButtonHeightTablet - kCaptureButtonVerticalInsetTablet,
                                       kCaptureButtonWidthTablet,
                                       kCaptureButtonHeightTablet);
-    
+
     _backButton.frame = CGRectMake((CGRectGetMinX(_captureButton.frame) - kBackButtonWidthTablet) / 2,
                                    CGRectGetMinY(_captureButton.frame) + ((kCaptureButtonHeightTablet - kBackButtonHeightTablet) / 2),
                                    kBackButtonWidthTablet,
                                    kBackButtonHeightTablet);
-    
+
     _buttonPanel.frame = CGRectMake(0,
                                     CGRectGetMinY(_captureButton.frame) - kCaptureButtonVerticalInsetTablet,
                                     bounds.size.width,
                                     kCaptureButtonHeightTablet + (kCaptureButtonVerticalInsetTablet * 2));
-    
+
     [self layoutForPhoneWithTallScreen];
 }
 
@@ -269,7 +269,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
             }
         }
         AVCaptureDeviceInput *cameraInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
-        
+
         if(cameraInput == nil){
             NSLog(@"Bricked Camera");
             for (AVCaptureDevice *device in [AVCaptureDevice devices]) {
@@ -279,7 +279,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
             }
             cameraInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
         }
-        
+
         [_captureSession addInput:cameraInput];
         _stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
         [_captureSession addOutput:_stillImageOutput];
@@ -311,11 +311,11 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
     {
         //Indicate that some changes will be made to the session
         [_captureSession beginConfiguration];
-        
+
         //Remove existing input
         AVCaptureInput* currentCameraInput = [_captureSession.inputs objectAtIndex:0];
         [_captureSession removeInput:currentCameraInput];
-        
+
         //Get new input
 //        AVCaptureDevice *newCamera = nil;
         if(((AVCaptureDeviceInput*)currentCameraInput).device.position == AVCaptureDevicePositionBack)
@@ -326,14 +326,14 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
         {
             _rearCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
         }
-        
+
         //Add input to session
         NSError *err = nil;
         AVCaptureDeviceInput *newVideoInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
         if(!newVideoInput || err)
         {
             NSLog(@"Error creating capture device input: %@", err.localizedDescription);
-            
+
             if(((AVCaptureDeviceInput*)newVideoInput).device.position == AVCaptureDevicePositionBack)
             {
                 _rearCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
@@ -344,9 +344,9 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
             }
             newVideoInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
         }
-        
+
         [_captureSession addInput:newVideoInput];
-        
+
         //Commit all the configuration changes at once
         [_captureSession commitConfiguration];
     }
@@ -392,7 +392,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 }
 
 - (void)autoFocus {
-    
+
     [_rearCamera lockForConfiguration:nil];
     _rearCamera.focusMode = AVCaptureFocusModeAutoFocus;
     _rearCamera.focusPointOfInterest = CGPointMake(0.5, 0.5);
@@ -420,24 +420,24 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 - (void)takePicture {
     AVCaptureConnection *videoConnection = [self videoConnectionToOutput:_stillImageOutput];
     [_stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
-        
+
         NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
-        
+
         UIImage *imagem = [UIImage imageWithData:imageData];
-        
+
 //        CGFloat heightScale = imagem.size.height/bounds.size.height;
-        
+
         CGRect rect = CGRectMake(0, (imagem.size.height-imagem.size.width) / 2, imagem.size.width, imagem.size.width);
-        
+
         CGAffineTransform rectTransform = [self orientationTransformedRectOfImage:imagem];
         rect = CGRectApplyAffineTransform(rect, rectTransform);
-        
+
         CGImageRef imageRef = CGImageCreateWithImageInRect([imagem CGImage], rect);
-        
+
         UIImage *imageCrop = [UIImage imageWithCGImage:imageRef  scale:imagem.scale orientation:imagem.imageOrientation];
-        
+
         CGImageRelease(imageRef);
-        
+
         _callback(imageCrop);
     }];
 }
@@ -458,7 +458,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
         default:
         rectTransform = CGAffineTransformIdentity;
     }
-    
+
     return CGAffineTransformScale(rectTransform, img.scale, img.scale);
 }
 
@@ -474,4 +474,3 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 }
 
 @end
-
