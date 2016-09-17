@@ -1,6 +1,6 @@
 ### Description
 
-Cordova plugin which mask Selfie camera.
+Cordova plugin which mask camera.
 
 ### Using the plugin
 

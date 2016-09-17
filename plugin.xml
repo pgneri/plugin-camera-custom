@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.pgneri.custom.plugin.camera"
+    id="com.pgneri.plugin.custom.camera"
     version="2.0">
 
     <name>CustomCamera</name>
-    <description>Custom Camera Plugin</description>
+    <description>Plugin Custom Camera </description>
     <license>Apache 2.0</license>
-    <keywords>camera,plugin,custom,selfie</keywords>
+    <keywords>camera,plugin,custom,selfie,mask</keywords>
 
 <engines>
     <engine name="cordova" version=">=3.1.0" />
@@ -26,10 +26,15 @@
         </feature>
     </config-file>
     <framework src="AVFoundation.framework" />
-    <header-file src="platforms/ios/CustomCamera/Classes/CustomCamera.h" />
-    <header-file src="platforms/ios/CustomCamera/Classes/CustomCameraViewController.h" />
-    <source-file src="platforms/ios/CustomCamera/Classes/CustomCamera.m" />
-    <source-file src="platforms/ios/CustomCamera/Classes/CustomCameraViewController.m" />
+
+    <header-file src="src/ios/CustomCamera.h" />
+    <source-file src="src/ios/CustomCamera.m" />
+
+    <header-file src="src/ios/CustomCameraViewController.h" />
+    <source-file src="src/ios/CustomCameraViewController.m" />
+
+    <source-file src="src/ios/ConfirmImageViewController.m" />
+    <header-file src="src/ios/ConfirmImageViewController.h" />
 </platform>
 
 
