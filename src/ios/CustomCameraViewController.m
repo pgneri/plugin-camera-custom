@@ -379,7 +379,12 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
     return nil;
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
+- (NSUInteger)supportedInterfaceOrientations
+#else
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+#endif
+{
     return UIInterfaceOrientationMaskPortrait;
 }
 
@@ -462,8 +467,8 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
         UIImage *image = [UIImage imageWithCGImage:imageRef  scale:imagem.scale orientation:imagem.imageOrientation];
         confirmImage.imageView.image = image;
         navController.navigationBarHidden = true;
-        
-        [confirmImage initWithCallback:^(BOOL *confirmed) {
+
+        (void) [confirmImage initWithCallback:^(BOOL confirmed) {
             if(confirmed) {
                 _callback(imageCrop);
             } else {

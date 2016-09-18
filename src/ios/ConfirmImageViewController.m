@@ -11,20 +11,20 @@
 #import "ConfirmImageViewController.h"
 
 @implementation ConfirmImageViewController {
-    void(^_callback)(BOOL*);
+    void(^_callback)(BOOL);
     UIButton *_backButton;
     UIButton *_confirmButton;
     UIImage *_selfie;
     UIImageView *_imageView;
     UIView *_bottomPanel;
     UIView *_fullPanel;
+    BOOL *_confirmed;
 }
 
-static const CGFloat kCaptureButtonWidthPhone = 64;
 static const CGFloat kCaptureButtonHeightPhone = 64;
 static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
-- (id)initWithCallback:(void(^)(BOOL*))callback {
+- (id)initWithCallback:(void(^)(BOOL))callback {
     self = [super initWithNibName:nil bundle:nil];
     
     if (self) {
@@ -77,7 +77,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
     [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_backButton setBackgroundColor:[UIColor whiteColor]];
     [[_backButton titleLabel] setFont:[UIFont systemFontOfSize:16]];
-    [_backButton addTarget:self action:@selector(dismissImagePreview) forControlEvents:UIControlEventTouchUpInside];
+    [_backButton addTarget:self action:@selector(restartCamera) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_backButton];
 
     
@@ -122,9 +122,11 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 }
 
 - (void)confirmImage {
+    _callback(YES);
+}
 
-    _callback(TRUE);
-    
+- (void)restartCamera {
+    _callback(false);
 }
 
  - (void)layoutForPhoneWithShortScreen {
@@ -187,19 +189,18 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
     return YES;
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
+- (NSUInteger)supportedInterfaceOrientations
+#else
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+#endif
+{
     return UIInterfaceOrientationMaskPortrait;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
-
-- (void)dismissImagePreview {
-    _callback(NO);
-//    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation {
     return orientation == UIDeviceOrientationPortrait;
