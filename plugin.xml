@@ -26,13 +26,12 @@
         </feature>
     </config-file>
     <framework src="AVFoundation.framework" />
-
+    <header-file src="src/ios/GlobalVars.h" />
+    <source-file src="src/ios/GlobalVars.m" />
     <header-file src="src/ios/CustomCamera.h" />
     <source-file src="src/ios/CustomCamera.m" />
-
     <header-file src="src/ios/CustomCameraViewController.h" />
     <source-file src="src/ios/CustomCameraViewController.m" />
-
     <source-file src="src/ios/ConfirmImageViewController.m" />
     <header-file src="src/ios/ConfirmImageViewController.h" />
 </platform>

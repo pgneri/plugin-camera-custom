@@ -8,6 +8,7 @@
 
 #import <Cordova/CDV.h>
 #import <AVFoundation/AVFoundation.h>
+#import "GlobalVars.h"
 #import "ConfirmImageViewController.h"
 
 @implementation ConfirmImageViewController {
@@ -70,10 +71,11 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 }
 
 - (UIView*)createOverlay {
+    GlobalVars *globals = [GlobalVars sharedInstance]; // Options plugin
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_backButton setTitle:@"TIRAR OUTRA FOTO" forState:UIControlStateNormal];
+    [_backButton setTitle:[NSString stringWithFormat:@"%@", globals.buttonRestart] forState:UIControlStateNormal];
     [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_backButton setBackgroundColor:[UIColor whiteColor]];
     [[_backButton titleLabel] setFont:[UIFont systemFontOfSize:16]];
@@ -82,14 +84,12 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
     
     _confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_confirmButton setTitle:@"OK" forState:UIControlStateNormal];
+    [_confirmButton setTitle:[NSString stringWithFormat:@"%@", globals.buttonDone] forState:UIControlStateNormal];
     [_confirmButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_confirmButton setBackgroundColor:[UIColor whiteColor]];
         [[_confirmButton titleLabel] setFont:[UIFont systemFontOfSize:16]];
     [_confirmButton addTarget:self action:@selector(confirmImage) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_confirmButton];
-
-//    [self.view.layer addSublayer:[self createLayerCircle]];
     
     return overlay;
 }
