@@ -197,7 +197,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (void)dismissImagePreview {
     _callback(NO);
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

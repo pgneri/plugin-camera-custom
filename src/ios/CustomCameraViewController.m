@@ -462,16 +462,13 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
         UIImage *image = [UIImage imageWithCGImage:imageRef  scale:imagem.scale orientation:imagem.imageOrientation];
         confirmImage.imageView.image = image;
         navController.navigationBarHidden = true;
-
-//        [self.navigationController addChildViewController:confirmImage];
-//        confirmImage.view.frame = self.navigationController.view.frame;
         
         [confirmImage initWithCallback:^(BOOL *confirmed) {
             if(confirmed) {
                 _callback(imageCrop);
             } else {
-//                [self restartSession];
-                NSLog(@"blabla");
+                _captureButton.userInteractionEnabled = YES;
+                _captureButton.selected = NO;
             }
             [self dismissViewControllerAnimated:YES completion:nil];
         }];
@@ -481,42 +478,6 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
     }];
 }
 
-- (void)restartSession {
-    if(_captureSession)
-    {
-        //Indicate that some changes will be made to the session
-        [_captureSession beginConfiguration];
-        
-        //Remove existing input
-        AVCaptureInput* currentCameraInput = [_captureSession.inputs objectAtIndex:0];
-        [_captureSession removeInput:currentCameraInput];
-        
-        _rearCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
-        
-        //Add input to session
-        NSError *err = nil;
-        AVCaptureDeviceInput *newVideoInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
-        if(!newVideoInput || err)
-        {
-            NSLog(@"Error creating capture device input: %@", err.localizedDescription);
-            
-            if(((AVCaptureDeviceInput*)newVideoInput).device.position == AVCaptureDevicePositionFront)
-            {
-                _rearCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
-            }
-            else
-            {
-                _rearCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
-            }
-            newVideoInput = [AVCaptureDeviceInput deviceInputWithDevice:_rearCamera error:nil];
-        }
-        
-        [_captureSession addInput:newVideoInput];
-        
-        //Commit all the configuration changes at once
-        [_captureSession commitConfiguration];
-    }
-}
 
 - (CGAffineTransform)orientationTransformedRectOfImage:(UIImage *)img
 {
