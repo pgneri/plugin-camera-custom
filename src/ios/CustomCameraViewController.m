@@ -6,11 +6,10 @@
 //
 //
 
-#import "CustomCameraViewController.h"
-
 #import <Cordova/CDV.h>
 #import <AVFoundation/AVFoundation.h>
-
+#import "CustomCameraViewController.h"
+#import "ConfirmImageViewController.h"
 
 @implementation CustomCameraViewController {
     void(^_callback)(UIImage*);
@@ -25,6 +24,7 @@
     UIView *_topPanel;
     UIView *_bottomPanel;
     UIView *_fullPanel;
+    UILabel *_topTitle;
 
 }
 
@@ -100,7 +100,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
     CAShapeLayer *fillLayer = [CAShapeLayer layer];
     fillLayer.path = path.CGPath;
     fillLayer.fillRule = kCAFillRuleEvenOdd;
-    fillLayer.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.9].CGColor;
+    fillLayer.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1].CGColor;
     fillLayer.opacity = 0.9;
 
     return fillLayer;
@@ -137,8 +137,16 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 //    [_changeCamera setImage:[UIImage imageNamed:@"www/img/icons/camera_toggle-touched.png"] forState:UIControlStateHighlighted];
 //    [_changeCamera addTarget:self action:@selector(changeCamera) forControlEvents:UIControlEventTouchUpInside];
 //    [overlay addSubview:_changeCamera];
-
-
+    
+    _topTitle = [[UILabel alloc] initWithFrame:CGRectZero];
+    [_topTitle setBackgroundColor: [UIColor clearColor]];
+    [_topTitle setText:@"Posicione seu rosto no centro da tela."];
+    [_topTitle setTextColor:[UIColor whiteColor]];
+    [_topTitle setFont:[UIFont systemFontOfSize:16]];
+    [_topTitle setTextAlignment:NSTextAlignmentCenter];
+    [overlay addSubview:_topTitle];
+    
+    
     _buttonPanel = [[UIView alloc] initWithFrame:CGRectZero];
     [_buttonPanel setBackgroundColor: [UIColor blackColor]];
     [overlay addSubview:_buttonPanel];
@@ -176,6 +184,10 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (void)layoutForPhone {
     CGRect bounds = [[UIScreen mainScreen] bounds];
+    
+    _topTitle.frame = CGRectMake(kCaptureButtonVerticalInsetPhone,0,
+                                 bounds.size.width-kCaptureButtonVerticalInsetPhone*2,
+                                 kChangeCameraButtonHeightPhone);
 
     _changeCamera.frame = CGRectMake(bounds.size.width-kChangeCameraButtonWidthPhone,0,
                                       kChangeCameraButtonWidthPhone,
@@ -238,6 +250,10 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
 
 - (void)layoutForTablet {
     CGRect bounds = [[UIScreen mainScreen] bounds];
+    
+    _topTitle.frame = CGRectMake(kCaptureButtonVerticalInsetPhone,0,
+                                 bounds.size.width-kCaptureButtonVerticalInsetPhone*2,
+                                 kChangeCameraButtonHeightPhone);
 
     _changeCamera.frame = CGRectMake(bounds.size.width-kChangeCameraButtonWidthTablet,0,
                                      kChangeCameraButtonWidthTablet,
@@ -437,7 +453,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
         UIImage *imageCrop = [UIImage imageWithCGImage:imageRef  scale:imagem.scale orientation:imagem.imageOrientation];
 
         CGImageRelease(imageRef);
-
+      
         _callback(imageCrop);
     }];
 }
