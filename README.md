@@ -5,7 +5,7 @@ Cordova plugin which mask camera.
 ### Using the plugin
 
 ```js
-navigator.customCamera.getPicture(filename, success, failure, [ options ]);
+navigator.customCamera.getPicture(success, failure, [ options ]);
 ```
 
 ### Options
