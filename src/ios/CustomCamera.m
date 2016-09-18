@@ -8,6 +8,8 @@
 
 #import "CustomCamera.h"
 #import "CustomCameraViewController.h"
+#import "ConfirmImageViewController.h"
+
 #define CDV_PHOTO_PREFIX @"cdv_photo_"
 
 static NSString* toBase64(NSData* data) {
@@ -45,36 +47,52 @@ static NSString* toBase64(NSData* data) {
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     } else {
         CustomCameraViewController *cameraViewController = [[CustomCameraViewController alloc] initWithCallback:^(UIImage *image) {
-            NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+            
+            ConfirmImageViewController *confirmImageView = [[ConfirmImageViewController alloc] initWithCallback:^(BOOL *confirmed) {
+                
+                if(confirmed){
+                    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 
-            NSString* imagePath;
-            NSFileManager* fileMgr = [[NSFileManager alloc] init]; // recommended by Apple (vs [NSFileManager defaultManager]) to be threadsafe
+                    NSString* imagePath;
+                    NSFileManager* fileMgr = [[NSFileManager alloc] init]; // recommended by Apple (vs [NSFileManager defaultManager]) to be threadsafe
 
-            // generate unique file name
-            int i = 1;
-            do {
-                imagePath = [NSString stringWithFormat:@"%@/%@%03d%@", documentsDirectory, CDV_PHOTO_PREFIX, i++, filename ];
-            } while ([fileMgr fileExistsAtPath:imagePath]);
+                    // generate unique file name
+                    int i = 1;
+                    do {
+                        imagePath = [NSString stringWithFormat:@"%@/%@%03d%@", documentsDirectory, CDV_PHOTO_PREFIX, i++, filename ];
+                    } while ([fileMgr fileExistsAtPath:imagePath]);
 
-            CGRect bounds = [[UIScreen mainScreen] bounds];
-            CGFloat Height = targetWidth;
-            CGFloat Width  = targetHeight;
+                    CGRect bounds = [[UIScreen mainScreen] bounds];
+                    CGFloat Height = targetWidth;
+                    CGFloat Width  = targetHeight;
 
-            if(targetWidth == -1 || targetHeight == -1){
-                Height = bounds.size.width;
-                Width  = bounds.size.width;
-            }
+                    if(targetWidth == -1 || targetHeight == -1){
+                        Height = bounds.size.width;
+                        Width  = bounds.size.width;
+                    }
 
-            UIImage *scaledImage = [self scaleImage:image toSize:CGSizeMake(Width, Height)];
-            NSData *scaledImageData = UIImageJPEGRepresentation(scaledImage, quality / 100);
-            [scaledImageData writeToFile:imagePath atomically:YES];
-            CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                                        messageAsString:toBase64(scaledImageData)];
-            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                    UIImage *scaledImage = [self scaleImage:image toSize:CGSizeMake(Width, Height)];
+                    NSData *scaledImageData = UIImageJPEGRepresentation(scaledImage, quality / 100);
+                    [scaledImageData writeToFile:imagePath atomically:YES];
+                    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                                                messageAsString:toBase64(scaledImageData)];
+                    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                } else {
+                    NSLog(@"Cancel");
+                }
+                [self.viewController dismissViewControllerAnimated:YES completion:nil];
+            }];
             [self.viewController dismissViewControllerAnimated:YES completion:nil];
+
+            [self.viewController presentViewController:confirmImageView animated:YES completion:nil];
+    
         }];
         [self.viewController presentViewController:cameraViewController animated:YES completion:nil];
     }
+}
+
+-(void) actionCameraMask{
+    
 }
 
 - (NSString *)encodeToBase64String:(UIImage *)image {
