@@ -11,5 +11,7 @@
 @interface ConfirmImageViewController : UIViewController
 
 - (id)initWithCallback:(void(^)(BOOL*))callback;
+-(UIImageView *)imageView;
+-(UIImage *)image;
 
 @end

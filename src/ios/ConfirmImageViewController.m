@@ -15,6 +15,7 @@
     UIButton *_backButton;
     UIButton *_confirmButton;
     UIImage *_selfie;
+    UIImageView *_imageView;
     UIView *_bottomPanel;
     UIView *_fullPanel;
 }
@@ -45,7 +46,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (void)loadView {
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.view.backgroundColor = [UIColor redColor];
+    self.view.backgroundColor = [UIColor blackColor];
     
     [self.view addSubview:[self createOverlay]];
 }
@@ -70,7 +71,6 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (UIView*)createOverlay {
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
     
     _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_backButton setTitle:@"TIRAR OUTRA FOTO" forState:UIControlStateNormal];
@@ -89,7 +89,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
     [_confirmButton addTarget:self action:@selector(confirmImage) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_confirmButton];
 
-    [self.view.layer addSublayer:[self createLayerCircle]];
+//    [self.view.layer addSublayer:[self createLayerCircle]];
     
     return overlay;
 }
@@ -145,6 +145,32 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
     _bottomPanel.frame = CGRectMake(0, bounds.size.height/4 + bottomsize/2,
                                     bounds.size.width,
                                     bounds.size.height/4- bottomsize);
+}
+
+-(UIImageView *)imageView
+{
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    int radius = bounds.size.width;
+
+    if( _imageView == nil )
+    {
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (bounds.size.height-bounds.size.width)/2-kCaptureButtonVerticalInsetPhone*2, radius, radius)];
+        [self.view addSubview:_imageView];
+    }
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, bounds.size.width, bounds.size.height-radius/2+kCaptureButtonVerticalInsetPhone*2) cornerRadius:0];
+    UIBezierPath *circlePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, (bounds.size.height-bounds.size.width)/2-kCaptureButtonVerticalInsetPhone*2, radius, radius) cornerRadius:radius];
+    [path appendPath:circlePath];
+    [path setUsesEvenOddFillRule:YES];
+    
+    CAShapeLayer *fillLayer = [CAShapeLayer layer];
+    fillLayer.path = path.CGPath;
+    fillLayer.fillRule = kCAFillRuleEvenOdd;
+    fillLayer.fillColor = [UIColor blackColor].CGColor;
+    fillLayer.opacity = 1;
+    [self.view.layer addSublayer:fillLayer];
+    
+    return _imageView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
