@@ -48,9 +48,9 @@ static NSString* toBase64(NSData* data) {
     } else {
         CustomCameraViewController *cameraViewController = [[CustomCameraViewController alloc] initWithCallback:^(UIImage *image) {
             
-            ConfirmImageViewController *confirmImageView = [[ConfirmImageViewController alloc] initWithCallback:^(BOOL *confirmed) {
-                
-                if(confirmed){
+//            ConfirmImageViewController *confirmImageView = [[ConfirmImageViewController alloc]  initWithCallback:^(BOOL *confirmed) {
+//                
+//                if(confirmed){
                     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 
                     NSString* imagePath;
@@ -77,14 +77,14 @@ static NSString* toBase64(NSData* data) {
                     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                                 messageAsString:toBase64(scaledImageData)];
                     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-                } else {
-                    NSLog(@"Cancel");
-                }
-                [self.viewController dismissViewControllerAnimated:YES completion:nil];
-            }];
+//                } else {
+//                    NSLog(@"Cancel");
+//                }
+//                [self.viewController dismissViewControllerAnimated:YES completion:nil];
+//            }];
             [self.viewController dismissViewControllerAnimated:YES completion:nil];
 
-            [self.viewController presentViewController:confirmImageView animated:YES completion:nil];
+//            [self.viewController presentViewController:confirmImageView animated:YES completion:nil];
     
         }];
         [self.viewController presentViewController:cameraViewController animated:YES completion:nil];
