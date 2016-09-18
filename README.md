@@ -43,3 +43,5 @@ navigator.customCamera.getPicture(function success(base64) {
     toggleCamera: true
 });
 ```
+
+https://github.com/pgneri/cordova.app.exempleCustomCamera
