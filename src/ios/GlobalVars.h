@@ -1,6 +1,6 @@
 //
 //  GlobalVars.h
-//  ExempleCustomCamera
+//  CustomCamera
 //
 //  Created by Patrícia Gabriele Neri on 18/09/16.
 //

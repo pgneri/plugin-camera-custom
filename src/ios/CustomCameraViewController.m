@@ -11,6 +11,7 @@
 #import "GlobalVars.h"
 #import "CustomCameraViewController.h"
 #import "ConfirmImageViewController.h"
+#import "PortrateNavigation.h"
 
 @implementation CustomCameraViewController {
     void(^_callback)(UIImage*);
@@ -386,6 +387,15 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
     return UIInterfaceOrientationMaskPortrait;
 }
 
+- (BOOL)shouldAutorotate;
+{
+    return NO;
+}
+
+-(NSUInteger)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
+    return navigationController.topViewController.supportedInterfaceOrientations;
+}
+
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
@@ -456,7 +466,7 @@ static const CGFloat kCaptureButtonVerticalInsetTablet = 20;
         CGImageRelease(imageRef);
         
         ConfirmImageViewController *confirmImage  = [ConfirmImageViewController alloc];
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:confirmImage];
+        PortrateNavigation *navController = [[PortrateNavigation alloc] initWithRootViewController:confirmImage];
         
         UIImage *image = [UIImage imageWithCGImage:imageRef  scale:imagem.scale orientation:imagem.imageOrientation];
         confirmImage.imageView.image = image;
