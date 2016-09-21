@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.pgneri.plugin.custom.camera"
-    version="2.0">
+    version="1.0">
 
     <name>CustomCamera</name>
     <description>Plugin Custom Camera </description>
@@ -25,7 +25,7 @@
             <param name="ios-package" value="CustomCamera" />
         </feature>
     </config-file>
-    
+
     <framework src="AVFoundation.framework" />
     <header-file src="src/ios/GlobalVars.h" />
     <header-file src="src/ios/CustomCamera.h" />
