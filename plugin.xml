@@ -31,11 +31,13 @@
     <header-file src="src/ios/CustomCamera.h" />
     <header-file src="src/ios/CustomCameraViewController.h" />
     <header-file src="src/ios/ConfirmImageViewController.h" />
+    <header-file src="src/ios/PortrateNavigation.h" />
 
     <source-file src="src/ios/CustomCamera.m" />
     <source-file src="src/ios/GlobalVars.m" />
     <source-file src="src/ios/CustomCameraViewController.m" />
     <source-file src="src/ios/ConfirmImageViewController.m" />
+    <source-file src="src/ios/PortrateNavigation.m" />
 </platform>
 <platform name="android">
     <config-file parent="/*" target="res/xml/config.xml">

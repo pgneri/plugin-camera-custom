@@ -27,7 +27,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (id)initWithCallback:(void(^)(BOOL))callback {
     self = [super initWithNibName:nil bundle:nil];
-
+    
     if (self) {
         _callback = callback;
     }
@@ -48,19 +48,19 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 - (void)loadView {
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.view.backgroundColor = [UIColor blackColor];
-
+    
     [self.view addSubview:[self createOverlay]];
 }
 
 - (CALayer*)createLayerCircle {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-
+    
     int radius = bounds.size.width;
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, bounds.size.width, bounds.size.height) cornerRadius:0];
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, (bounds.size.height-bounds.size.width)/2-kCaptureButtonVerticalInsetPhone*2, radius, radius) cornerRadius:radius];
     [path appendPath:circlePath];
     [path setUsesEvenOddFillRule:YES];
-
+    
     CAShapeLayer *fillLayer = [CAShapeLayer layer];
     fillLayer.path = path.CGPath;
     fillLayer.fillRule = kCAFillRuleEvenOdd;
@@ -73,7 +73,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 - (UIView*)createOverlay {
     GlobalVars *globals = [GlobalVars sharedInstance]; // Options plugin
     UIView *overlay = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
+    
     _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_backButton setTitle:[NSString stringWithFormat:@"%@", globals.buttonRestart] forState:UIControlStateNormal];
     [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -82,7 +82,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
     [_backButton addTarget:self action:@selector(restartCamera) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_backButton];
 
-
+    
     _confirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_confirmButton setTitle:[NSString stringWithFormat:@"%@", globals.buttonDone] forState:UIControlStateNormal];
     [_confirmButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -90,7 +90,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
         [[_confirmButton titleLabel] setFont:[UIFont systemFontOfSize:16]];
     [_confirmButton addTarget:self action:@selector(confirmImage) forControlEvents:UIControlEventTouchUpInside];
     [overlay addSubview:_confirmButton];
-
+    
     return overlay;
 }
 
@@ -100,7 +100,7 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (void)layoutForPhone {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-
+    
     _backButton.frame = CGRectMake(kCaptureButtonVerticalInsetPhone,
                                       bounds.size.height - kCaptureButtonHeightPhone,
                                       bounds.size.width-kCaptureButtonVerticalInsetPhone*2,
@@ -108,15 +108,15 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
     _backButton.layer.cornerRadius = 5;
     _backButton.clipsToBounds = YES;
 
-
+    
     _confirmButton.frame = CGRectMake(kCaptureButtonVerticalInsetPhone,
                                       bounds.size.height - kCaptureButtonHeightPhone - kCaptureButtonHeightPhone + kCaptureButtonVerticalInsetPhone,
                                       bounds.size.width-kCaptureButtonVerticalInsetPhone*2,
                                       kCaptureButtonHeightPhone - kCaptureButtonVerticalInsetPhone*2);
     _confirmButton.layer.cornerRadius = 5;
     _confirmButton.clipsToBounds = YES;
-
-
+    
+    
     [self layoutForPhoneWithShortScreen];
 
 }
@@ -131,9 +131,9 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
  - (void)layoutForPhoneWithShortScreen {
      CGRect bounds = [[UIScreen mainScreen] bounds];
-
+     
      CGFloat bottomsize = kCaptureButtonHeightPhone + (kCaptureButtonVerticalInsetPhone * 2);
-
+     
      _bottomPanel.frame = CGRectMake(0, bounds.size.height/4 + bottomsize/2,
                                      bounds.size.width,
                                      bounds.size.height/4- bottomsize);
@@ -141,9 +141,9 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (void)layoutForPhoneWithTallScreen {
     CGRect bounds = [[UIScreen mainScreen] bounds];
-
+    
     CGFloat bottomsize = kCaptureButtonHeightPhone + (kCaptureButtonVerticalInsetPhone * 2);
-
+    
     _bottomPanel.frame = CGRectMake(0, bounds.size.height/4 + bottomsize/2,
                                     bounds.size.width,
                                     bounds.size.height/4- bottomsize);
@@ -159,19 +159,19 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, (bounds.size.height-bounds.size.width)/2-kCaptureButtonVerticalInsetPhone*2, radius, radius)];
         [self.view addSubview:_imageView];
     }
-
+    
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, bounds.size.width, bounds.size.height-radius/2+kCaptureButtonVerticalInsetPhone*3) cornerRadius:0];
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, (bounds.size.height-bounds.size.width)/2-kCaptureButtonVerticalInsetPhone*2, radius, radius) cornerRadius:radius];
     [path appendPath:circlePath];
     [path setUsesEvenOddFillRule:YES];
-
+    
     CAShapeLayer *fillLayer = [CAShapeLayer layer];
     fillLayer.path = path.CGPath;
     fillLayer.fillRule = kCAFillRuleEvenOdd;
     fillLayer.fillColor = [UIColor blackColor].CGColor;
     fillLayer.opacity = 1;
     [self.view.layer addSublayer:fillLayer];
-
+    
     return _imageView;
 }
 
@@ -187,6 +187,10 @@ static const CGFloat kCaptureButtonVerticalInsetPhone = 10;
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
+-(NSUInteger)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
+    return navigationController.topViewController.supportedInterfaceOrientations;
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 90000
