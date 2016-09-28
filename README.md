@@ -19,7 +19,7 @@ navigator.customCamera.getPicture(success, failure, [ options ]);
 |buttonDone | 'OK' | ButtonDone to Image preview, default 'OK'. |
 |buttonRestart | 'Take another picture' | ButtonRestart to Image preview, default 'Take another picture'. |
 |buttonCancel | 'Cancel' | ButtonCancel to cancel get Picture, default 'Cancel'. |
-|toggleCamera | false | toggleCamera to show button the alter front and back camera, default false. |
+|toggleCamera | false | toggleCamera to show button the alter front and back camera, default false. (ios only) |
 
 ### Image scaling
 

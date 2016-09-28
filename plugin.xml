@@ -39,6 +39,24 @@
     <source-file src="src/ios/ConfirmImageViewController.m" />
     <source-file src="src/ios/PortrateNavigation.m" />
 </platform>
-
-
+<platform name="android">
+    <config-file parent="/*" target="res/xml/config.xml">
+        <feature name="CustomCamera">
+            <param name="android-package" value="com.pgneri.plugin.custom.camera.CustomCamera" />
+        </feature>
+    </config-file>
+    <config-file parent="/*" target="AndroidManifest.xml">
+      <uses-permission android:name="android.permission.CAMERA" />
+    </config-file>
+    <config-file parent="/manifest/application" target="AndroidManifest.xml">
+      <activity android:name="com.pgneri.plugin.custom.camera.CameraActivity" >
+          <intent-filter>
+            <category android:name="android.intent.category.DEFAULT" />
+            <action android:name="com.pgneri.plugin.custom.camera.OPEN_CAMERA" />
+          </intent-filter>
+      </activity>
+    </config-file>
+    <source-file src="src/android/CustomCamera.java" target-dir="src/com/pgneri/plugin/custom/camera" />
+    <source-file src="src/android/CameraActivity.java" target-dir="src/com/pgneri/plugin/custom/camera" />
+  </platform>
 </plugin>
