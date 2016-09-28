@@ -57,7 +57,6 @@
       </activity>
     </config-file>
     <source-file src="src/android/CustomCamera.java" target-dir="src/com/pgneri/plugin/custom/camera" />
-    <source-file src="src/android/TakePictureAction.java" target-dir="src/com/pgneri/plugin/custom/camera" />
     <source-file src="src/android/CameraActivity.java" target-dir="src/com/pgneri/plugin/custom/camera" />
   </platform>
 </plugin>
