@@ -196,7 +196,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
     }
 
     private Bitmap resizeImage(Bitmap image, int targetWidth, int targetHeight) {
-        return Bitmap.createScaledBitmap(image, targetWidth, targetHeight, false);
+        if(targetWidth != -1 && targetHeight != -1) {
+          return Bitmap.createScaledBitmap(image, targetWidth, targetHeight, false);
+        } else {
+          return image;
+        }
     }
 
     private void finish(String base64) {
