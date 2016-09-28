@@ -122,6 +122,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
         final Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_FRONT, info);
@@ -181,7 +186,11 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
     }
 
     private void stopPreview() {
-        this.mCamera.stopPreview();
+        if(this.mCamera != null) {
+            this.mCamera.stopPreview();
+            this.mCamera.release();
+        }
+        this.mCamera = null;
         this.mPreviewRunning = false;
     }
 
