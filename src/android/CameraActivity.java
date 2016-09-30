@@ -125,7 +125,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
         if (mCamera != null) {
             mCamera.stopPreview();
             mCamera.release();
-            mCamera = null;
         }
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
         final Camera.CameraInfo info = new Camera.CameraInfo();
@@ -170,6 +169,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
         this.stopPreview();
     }
 
+    @Override
+    protected void onDestroy() {
+        if(this.mCamera != null) {
+            this.mCamera.stopPreview();
+            this.mCamera.release();
+        }
+        super.onDestroy();
+    }
 
     private void startPreview() {
         if (this.mPreviewRunning) {
@@ -188,9 +195,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
     private void stopPreview() {
         if(this.mCamera != null) {
             this.mCamera.stopPreview();
-            this.mCamera.release();
         }
-        this.mCamera = null;
         this.mPreviewRunning = false;
     }
 
@@ -206,9 +211,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
     private Bitmap resizeImage(Bitmap image, int targetWidth, int targetHeight) {
         if(targetWidth != -1 && targetHeight != -1) {
-          return Bitmap.createScaledBitmap(image, targetWidth, targetHeight, false);
+            return Bitmap.createScaledBitmap(image, targetWidth, targetHeight, false);
         } else {
-          return image;
+            return image;
         }
     }
 
@@ -220,6 +225,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
         setResult(0, intent);
         CameraActivity.this.finish();
     }
+
+
 
     private String toBase64(Bitmap image) {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
