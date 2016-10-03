@@ -217,6 +217,18 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
         }
     }
 
+    private Bitmap fixRotation(Bitmap bitmap) {
+        if (bitmap.getHeight() < bitmap.getWidth()) {
+            int w = bitmap.getWidth();
+            int h = bitmap.getHeight();
+            Matrix mtx = new Matrix();
+            mtx.postRotate(90);
+            return Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
+        }
+        return bitmap;
+    }
+
+
     private void finish(String base64) {
         Bundle conData = new Bundle();
         conData.putString(OUTPUT, base64);
@@ -391,7 +403,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
             final Bitmap flippedBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             final Matrix m = new Matrix();
             m.preScale(-1, 1);
-            CameraActivity.this.image = Bitmap.createBitmap(flippedBitmap, 0, 0, flippedBitmap.getWidth(), flippedBitmap.getHeight(), m, false);
+            Bitmap image = Bitmap.createBitmap(flippedBitmap, 0, 0, flippedBitmap.getWidth(), flippedBitmap.getHeight(), m, false);
+            CameraActivity.this.image = CameraActivity.this.fixRotation(image);
             CameraActivity.this.showSelectPictureState();
         }
     }
