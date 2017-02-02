@@ -43,5 +43,7 @@ navigator.customCamera.getPicture(function success(base64) {
     toggleCamera: true
 });
 ```
-
 https://github.com/pgneri/cordova.app.exempleCustomCamera
+
+##### Layout compatible with iPhone 5 or later.
+
